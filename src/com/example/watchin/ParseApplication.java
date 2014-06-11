@@ -1,4 +1,4 @@
-package com.parse.starter;
+package com.example.watchin;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
