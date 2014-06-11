@@ -62,18 +62,7 @@ public class FriendDetail extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_edit_profile) {
-			Intent intent = new Intent(this, EditProfile.class);
-			startActivity(intent);
-		}
-		// Log out menu item
-		else if (id == R.id.action_logout) {
-			ParseUser.logOut();
-			Intent intent = new Intent(this, LoginActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			startActivity(intent);
-		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -130,14 +119,6 @@ public class FriendDetail extends ActionBarActivity {
 
 			mFriendUsername = (TextView) rootView
 					.findViewById(R.id.friendUserName);
-			mFriendNumberCheckIn = (TextView) rootView
-					.findViewById(R.id.friendNumberCheckIn);
-			mFriendNumberFollower = (TextView) rootView
-					.findViewById(R.id.friendNumberFollower);
-			mFriendNumberFollowing = (TextView) rootView
-					.findViewById(R.id.friendNumberFollowing);
-			mRecentActivity = (ListView) rootView
-					.findViewById(R.id.recentActivity);
 			mButtonStatus = (Button) rootView.findViewById(R.id.buttonStatus);
 			mFriendProfilePicture = (ParseImageView) rootView
 					.findViewById(R.id.friendProfilePicture);

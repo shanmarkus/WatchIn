@@ -1315,6 +1315,7 @@ containing a value of this type.
         public static final int title_activity_add_item=0x7f0a0026;
         public static final int title_activity_add_promotion=0x7f0a001c;
         public static final int title_activity_broadcast=0x7f0a001b;
+        public static final int title_activity_friend_detail=0x7f0a0038;
         public static final int title_activity_friend_information=0x7f0a0030;
         public static final int title_activity_item_detail=0x7f0a0017;
         public static final int title_activity_login=0x7f0a0015;
