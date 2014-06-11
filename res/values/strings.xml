@@ -2,10 +2,9 @@
 <resources>
 
     <string name="app_name">StoreInBusiness</string>
-    <string name="title_section1">Approve Promotions</string>
-    <string name="title_section2">Manage Items</string>
-    <string name="title_section3">Manage Promotions</string>
-    <string name="title_section4">Send Broadcast</string>
+    <string name="title_section1">Main Menu</string>
+    <string name="title_section2">Add Family</string>
+    <string name="title_section3">Inbox</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -34,5 +33,8 @@
     <string name="login_error_message">Login Error Please input the correct credential of the user</string>
     <string name="login_error_title">Error</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="friend_information_hint">Please input family username</string>
+    <string name="friend_information_imagebutton_desc">Image button friend image</string>
+    <string name="friend_information_friend_list_title">Family List</string>
 
 </resources>

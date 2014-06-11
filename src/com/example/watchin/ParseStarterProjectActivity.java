@@ -9,9 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.storein.LoginActivity;
-import com.example.storein.MainActivity;
-import com.example.storein.R;
 import com.parse.LogInCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;

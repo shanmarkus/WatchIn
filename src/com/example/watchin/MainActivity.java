@@ -1,30 +1,39 @@
 package com.example.watchin;
 
+import com.example.storein.DiscoverFragment;
+import com.example.storein.FriendInformation;
+import com.example.storein.HomeFragment;
+import com.example.storein.R;
+import com.example.storein.UpdatesFragment;
+import com.parse.ParseAnalytics;
+import com.parse.ParseUser;
+
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-	/**
-	 * Fragment managing the behaviors, interactions and presentation of the
-	 * navigation drawer.
-	 */
+	private static final String TAG = MainActivity.class.getSimpleName();
+
+	// Variables
+	private boolean doubleBackToExitPressedOnce = false;
+
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	/**
@@ -38,6 +47,16 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// Set user login session
+		ParseAnalytics.trackAppOpened(getIntent());
+		ParseUser currentUser = ParseUser.getCurrentUser();
+
+		if (currentUser == null) {
+			navigateToLogin();
+		} else {
+			Log.i(TAG, "Success Login");
+		}
+
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -47,14 +66,54 @@ public class MainActivity extends ActionBarActivity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 	}
 
+	/*
+	 * Navigate To Login Functions
+	 */
+	private void navigateToLogin() {
+		Intent intent = new Intent(this, ParseStarterProjectActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (doubleBackToExitPressedOnce) {
+			super.onBackPressed();
+			return;
+		}
+
+		this.doubleBackToExitPressedOnce = true;
+		Toast.makeText(this, "Please click BACK again to exit",
+				Toast.LENGTH_SHORT).show();
+
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				doubleBackToExitPressedOnce = false;
+			}
+		}, 2000);
+	}
+
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
+		Fragment fragment = new HomeFragment();
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
+		switch (position) {
+//		case 0:
+//			fragment = new DiscoverFragment();
+//			break;
+//		case 1:
+//			fragment = new HomeFragment();
+//			break;
+		case 2:
+			fragment = new FriendInformation();
+			break;
+		}
+		fragmentManager.beginTransaction().replace(R.id.container, fragment)
+				.commit();
 	}
 
 	public void onSectionAttached(int number) {
@@ -81,9 +140,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mNavigationDrawerFragment.isDrawerOpen()) {
-			// Only show items in the action bar relevant to this screen
-			// if the drawer is not showing. Otherwise, let the drawer
-			// decide what to show in the action bar.
+
 			getMenuInflater().inflate(R.menu.main, menu);
 			restoreActionBar();
 			return true;
@@ -93,9 +150,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
