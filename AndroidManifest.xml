@@ -28,6 +28,22 @@
             android:name="com.example.watchin.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name="com.example.watchin.FriendInformation"
+            android:label="@string/title_activity_friend_information"
+            android:parentActivityName="com.example.watchin.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.watchin.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.watchin.AddFriend"
+            android:label="@string/title_activity_add_friend"
+            android:parentActivityName="com.example.storein.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.watchin.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

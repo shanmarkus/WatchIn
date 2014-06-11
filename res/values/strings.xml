@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">StoreInBusiness</string>
+    <string name="app_name">Watch In</string>
     <string name="title_section1">Main Menu</string>
     <string name="title_section2">Add Family</string>
     <string name="title_section3">Inbox</string>
@@ -36,5 +36,8 @@
     <string name="friend_information_hint">Please input family username</string>
     <string name="friend_information_imagebutton_desc">Image button friend image</string>
     <string name="friend_information_friend_list_title">Family List</string>
-
+    <string name="title_activity_friend_information">Family Information</string>
+    <string name="add_friend_button_follow">Follow</string>
+	<string name="add_friend_username">Username</string>
+	<string name="title_activity_add_friend">Add Family</string>
 </resources>
