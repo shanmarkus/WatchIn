@@ -16,6 +16,9 @@ public final class R {
         public static final int abc_slide_out_bottom=0x7f040004;
         public static final int abc_slide_out_top=0x7f040005;
     }
+    public static final class array {
+        public static final int time_arrays=0x7f0c0000;
+    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1197,11 +1200,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f060026;
         public static final int action_bar_title=0x7f060025;
         public static final int action_context_bar=0x7f060020;
-        public static final int action_example=0x7f06005a;
+        public static final int action_example=0x7f06005c;
         public static final int action_menu_divider=0x7f060019;
         public static final int action_menu_presenter=0x7f06001a;
         public static final int action_mode_close_button=0x7f060027;
-        public static final int action_settings=0x7f060059;
+        public static final int action_settings=0x7f06005b;
         public static final int activity_chooser_view_content=0x7f060028;
         public static final int always=0x7f06000f;
         public static final int beginning=0x7f060014;
@@ -1235,14 +1238,15 @@ containing a value of this type.
         public static final int listFriend=0x7f060050;
         public static final int listMode=0x7f060005;
         public static final int list_item=0x7f06002c;
-        public static final int loginButton=0x7f060058;
+        public static final int loginButton=0x7f06005a;
+        public static final int map=0x7f060056;
         public static final int middle=0x7f060015;
         public static final int navigation_drawer=0x7f060042;
         public static final int never=0x7f06000d;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
         public static final int pager=0x7f060040;
-        public static final int passwordField=0x7f060057;
+        public static final int passwordField=0x7f060059;
         public static final int progress_circular=0x7f06001b;
         public static final int progress_horizontal=0x7f06001c;
         public static final int radio=0x7f060032;
@@ -1264,6 +1268,7 @@ containing a value of this type.
         public static final int showCustom=0x7f06000b;
         public static final int showHome=0x7f060008;
         public static final int showTitle=0x7f06000a;
+        public static final int spinner1=0x7f060057;
         public static final int split_action_bar=0x7f060021;
         public static final int submit_area=0x7f06003c;
         public static final int tabMode=0x7f060006;
@@ -1276,7 +1281,7 @@ containing a value of this type.
         public static final int top_action_bar=0x7f060023;
         public static final int up=0x7f060024;
         public static final int useLogo=0x7f060007;
-        public static final int usernameField=0x7f060056;
+        public static final int usernameField=0x7f060058;
         public static final int withText=0x7f060010;
     }
     public static final class integer {
@@ -1345,9 +1350,9 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f030024;
     }
     public static final class menu {
-        public static final int global=0x7f0c0000;
-        public static final int main=0x7f0c0001;
-        public static final int watch_me=0x7f0c0002;
+        public static final int global=0x7f0d0000;
+        public static final int main=0x7f0d0001;
+        public static final int watch_me=0x7f0d0002;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1530,6 +1535,7 @@ containing a value of this type.
         public static final int title_section2=0x7f070029;
         public static final int title_section3=0x7f07002a;
         public static final int top_items_add_button=0x7f07003f;
+        public static final int watch_me_spinner_title=0x7f070055;
     }
     public static final class style {
         /**  Mimic text appearance in select_dialog_item.xml 

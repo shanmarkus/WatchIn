@@ -47,5 +47,12 @@
     <string name="title_activity_friend_detail">Family Detail</string>
     <string name="title_activity_home">Home</string>
     <string name="title_activity_watch_me">Watch Me</string>
+    <string name="watch_me_spinner_title">Time Reminder</string>
+
+    <string-array name="time_arrays">
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </string-array>
 
 </resources>
