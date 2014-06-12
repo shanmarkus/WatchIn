@@ -45,4 +45,5 @@
 	<string name="home_username">User name</string>
 	<string name="home_recent_activity_title">User recent activity</string>
 	<string name="title_activity_friend_detail">Family Detail</string>
+	<string name="title_activity_home">Home</string>
 </resources>

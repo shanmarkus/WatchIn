@@ -1230,10 +1230,11 @@ containing a value of this type.
         public static final int fragment_add_friend=0x7f03001c;
         public static final int fragment_friend_detail=0x7f03001d;
         public static final int fragment_friend_information=0x7f03001e;
-        public static final int fragment_main=0x7f03001f;
-        public static final int fragment_navigation_drawer=0x7f030020;
-        public static final int main=0x7f030021;
-        public static final int support_simple_spinner_dropdown_item=0x7f030022;
+        public static final int fragment_home=0x7f03001f;
+        public static final int fragment_main=0x7f030020;
+        public static final int fragment_navigation_drawer=0x7f030021;
+        public static final int main=0x7f030022;
+        public static final int support_simple_spinner_dropdown_item=0x7f030023;
     }
     public static final class menu {
         public static final int global=0x7f0c0000;
@@ -1317,6 +1318,7 @@ containing a value of this type.
         public static final int title_activity_broadcast=0x7f0a001b;
         public static final int title_activity_friend_detail=0x7f0a0038;
         public static final int title_activity_friend_information=0x7f0a0030;
+        public static final int title_activity_home=0x7f0a0039;
         public static final int title_activity_item_detail=0x7f0a0017;
         public static final int title_activity_login=0x7f0a0015;
         public static final int title_activity_main=0x7f0a002c;
