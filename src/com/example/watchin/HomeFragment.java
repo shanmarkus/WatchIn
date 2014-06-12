@@ -2,6 +2,7 @@ package com.example.watchin;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.parse.ParseException;
@@ -37,7 +39,7 @@ public class HomeFragment extends Fragment {
 	protected static final String TAG = HomeFragment.class.getSimpleName();
 	ProgressDialog progressDialog;
 	GeoPoint p;
-	ArrayList<Integer> myGeoPoints = new ArrayList<Integer>();
+	double[] myGeoPoints;
 
 	// UI Variables
 	EditText mHomeDestinationEditText;
@@ -162,7 +164,6 @@ public class HomeFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			// Clear Arraylist
-			myGeoPoints.clear();
 
 			List<Address> addresses;
 			String temp = mHomeDestinationEditText.getText().toString();
@@ -177,14 +178,24 @@ public class HomeFragment extends Fragment {
 				}
 
 				if (addresses.size() > 0) {
+					myGeoPoints = new double[addresses.size() + 1];
 					p = new GeoPoint(
 							(int) (addresses.get(0).getLatitude() * 1E6),
 							(int) (addresses.get(0).getLongitude() * 1E6));
 					mHomeDestinationEditText.setText("");
 
 					// add to arraylist
-					myGeoPoints.add(p.getLatitudeE6());
-					myGeoPoints.add(p.getLongitudeE6());
+					Double tempLat = p.getLatitudeE6() * -1E6;
+					Double tempLong = p.getLongitudeE6() * -1E6;
+
+					myGeoPoints[0] = tempLat;
+					myGeoPoints[1] = tempLong;
+
+					Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT)
+							.show();
+					Toast.makeText(getActivity(),
+							tempLat.toString() + " " + tempLong.toString(),
+							Toast.LENGTH_SHORT).show();
 
 					// Setup UI
 					mHomeSubmitButton.setEnabled(true);

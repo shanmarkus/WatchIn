@@ -91,6 +91,9 @@ public class WatchMeActivity extends ActionBarActivity {
 			View rootView = inflater.inflate(R.layout.fragment_watch_me,
 					container, false);
 
+			// Get LatLng Destination
+			getDestPosition();
+
 			// Adding Location Manager
 			LocationManager locationManager = (LocationManager) getActivity()
 					.getSystemService(Context.LOCATION_SERVICE);
@@ -132,23 +135,29 @@ public class WatchMeActivity extends ActionBarActivity {
 		// Added function
 
 		/*
-		 * Get The Destination Lat and Lang
+		 * Get Current Position
 		 */
 
-		protected void getAllPosition() {
+		protected void getCurrentPosition() {
 			// Get User Current Location
 			currentLocation = mLocationClient.getLastLocation();
 			destPosition = new LatLng(currentLocation.getLatitude(),
 					currentLocation.getLongitude());
+		}
 
+		/*
+		 * Get The Destination Lat and Lang
+		 */
+
+		protected void getDestPosition() {
 			// Get User Destination Location
 			Intent intent = getActivity().getIntent();
-			ArrayList<Integer> temp = new ArrayList<Integer>();
-			temp = intent.getIntegerArrayListExtra(ParseConstants.KEY_LOCATION);
-			sourcePosition = new LatLng(temp.get(0), temp.get(1));
+			double[] temp;
+			temp = intent.getDoubleArrayExtra(ParseConstants.KEY_LOCATION);
+			// sourcePosition = new LatLng(temp[0], temp[1]);
+			Toast.makeText(getActivity(), temp.length + "", Toast.LENGTH_SHORT)
+					.show();
 
-			// Drawing Route to the Maps
-			drawMaps(sourcePosition, destPosition);
 		}
 
 		/*
@@ -217,8 +226,6 @@ public class WatchMeActivity extends ActionBarActivity {
 		@Override
 		public void onConnected(Bundle connectionHint) {
 			mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
-			getAllPosition();
-
 		}
 
 		@Override
