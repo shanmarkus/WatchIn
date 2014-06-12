@@ -1,10 +1,5 @@
 package com.example.watchin;
 
-import com.example.storein.DiscoverFragment;
-import com.example.storein.FriendInformation;
-import com.example.storein.HomeFragment;
-import com.example.storein.R;
-import com.example.storein.UpdatesFragment;
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 
@@ -102,12 +97,12 @@ public class MainActivity extends ActionBarActivity implements
 		Fragment fragment = new HomeFragment();
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		switch (position) {
-//		case 0:
-//			fragment = new DiscoverFragment();
-//			break;
-//		case 1:
-//			fragment = new HomeFragment();
-//			break;
+		// case 0:
+		// fragment = new DiscoverFragment();
+		// break;
+		// case 1:
+		// fragment = new HomeFragment();
+		// break;
 		case 2:
 			fragment = new FriendInformation();
 			break;

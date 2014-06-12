@@ -85,25 +85,7 @@ public class HomeFragment extends Fragment {
 		}
 
 		// UI Declaration
-		mHomeProfilePicture = (ParseImageView) rootView
-				.findViewById(R.id.homeProfilePicture);
-		mHomeNumberCheckIn = (TextView) rootView
-				.findViewById(R.id.homeNumberCheckIn);
-		mHomeNumberFollower = (TextView) rootView
-				.findViewById(R.id.homeNumberFollower);
-		mHomeNumberFollowing = (TextView) rootView
-				.findViewById(R.id.homeNumberFollowing);
-		mHomeNumberCheckIn = (TextView) rootView
-				.findViewById(R.id.homeNumberCheckIn);
-		mHomeUserName = (TextView) rootView.findViewById(R.id.homeUserName);
-		mHomeTextClaimedPromotion = (TextView) rootView
-				.findViewById(R.id.homeTextClaimedPromotion);
-		mHomeTextRewardPoints = (TextView) rootView
-				.findViewById(R.id.homeTextRewardPoints);
-		mHomeStashButton = (ImageButton) rootView
-				.findViewById(R.id.homeStashButton);
 
-		mHomeStashButton.setOnClickListener(stashListener);
 
 		return rootView;
 	}
