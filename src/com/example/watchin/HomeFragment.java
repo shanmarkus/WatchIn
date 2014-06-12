@@ -25,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.parse.ParseException;
@@ -38,7 +37,7 @@ public class HomeFragment extends Fragment {
 	protected static final String TAG = HomeFragment.class.getSimpleName();
 	ProgressDialog progressDialog;
 	GeoPoint p;
-	ArrayList<GeoPoint> myGeoPoints = new ArrayList<GeoPoint>();
+	ArrayList<Integer> myGeoPoints = new ArrayList<Integer>();
 
 	// UI Variables
 	EditText mHomeDestinationEditText;
@@ -184,7 +183,8 @@ public class HomeFragment extends Fragment {
 					mHomeDestinationEditText.setText("");
 
 					// add to arraylist
-					myGeoPoints.add(p);
+					myGeoPoints.add(p.getLatitudeE6());
+					myGeoPoints.add(p.getLongitudeE6());
 
 					// Setup UI
 					mHomeSubmitButton.setEnabled(true);
