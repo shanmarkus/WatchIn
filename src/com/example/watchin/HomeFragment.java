@@ -1,12 +1,21 @@
 package com.example.watchin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,31 +23,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
+import com.google.android.maps.GeoPoint;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class HomeFragment extends Fragment {
+
+	// Variables
 	protected static final String TAG = HomeFragment.class.getSimpleName();
 	ProgressDialog progressDialog;
+	GeoPoint p;
+	ArrayList<GeoPoint> myGeoPoints = new ArrayList<GeoPoint>();
 
 	// UI Variables
-	ParseImageView mHomeProfilePicture;
-	TextView mHomeUserName;
-	TextView mHomeNumberCheckIn;
-	TextView mHomeNumberFollower;
-	TextView mHomeNumberFollowing;
-	TextView mHomeTextClaimedPromotion;
-	TextView mHomeTextRewardPoints;
-	ImageButton mHomeStashButton;
+	EditText mHomeDestinationEditText;
+	Button mHomeSubmitButton;
+	Button mHomeCheckButton;
 
 	// Fixed Variables
 	Date yesterday = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L);
@@ -75,7 +80,6 @@ public class HomeFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_home, container,
 				false);
-
 		if (ParseUser.getCurrentUser() == null) {
 			navigateToLogin();
 		} else {
@@ -83,9 +87,16 @@ public class HomeFragment extends Fragment {
 			currentUser = ParseUser.createWithoutData(
 					ParseConstants.TABLE_USER, userId);
 		}
-
 		// UI Declaration
+		mHomeDestinationEditText = (EditText) rootView
+				.findViewById(R.id.homeDestinationEditText);
+		mHomeCheckButton = (Button) rootView.findViewById(R.id.homeCheckButton);
+		mHomeSubmitButton = (Button) rootView
+				.findViewById(R.id.homeSubmitButton);
 
+		mHomeCheckButton.setOnClickListener(checkLocation);
+
+		mHomeSubmitButton.setEnabled(false);
 		return rootView;
 	}
 
@@ -123,6 +134,91 @@ public class HomeFragment extends Fragment {
 	 */
 
 	// Get All
+
+	// Map Class
+	public class MapOverlay extends com.google.android.maps.Overlay {
+		public boolean draw(Canvas canvas,
+				com.google.android.maps.MapView mapView, boolean shadow,
+				long when) {
+			super.draw(canvas, mapView, shadow);
+
+			// ---translate the GeoPoint to screen pixels---
+			Point screenPts = new Point();
+			mapView.getProjection().toPixels(p, screenPts);
+
+			// ---add the marker---
+			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+					R.drawable.drawer_shadow);
+			canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 32, null);
+			return true;
+		}
+	}
+
+	/*
+	 * Check Location to google maps if it track able or not
+	 */
+
+	OnClickListener checkLocation = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// Clear Arraylist
+			myGeoPoints.clear();
+
+			List<Address> addresses;
+			String temp = mHomeDestinationEditText.getText().toString();
+			Geocoder geoCoder;
+			geoCoder = new Geocoder(getActivity(), Locale.getDefault());
+
+			try {
+				addresses = geoCoder.getFromLocationName(temp, 1);
+
+				while (addresses.size() == 0) {
+					addresses = geoCoder.getFromLocationName(temp, 1);
+				}
+
+				if (addresses.size() > 0) {
+					p = new GeoPoint(
+							(int) (addresses.get(0).getLatitude() * 1E6),
+							(int) (addresses.get(0).getLongitude() * 1E6));
+					mHomeDestinationEditText.setText("");
+
+					// add to arraylist
+					myGeoPoints.add(p);
+
+					// Setup UI
+					mHomeSubmitButton.setEnabled(true);
+					mHomeSubmitButton.setOnClickListener(submitLocation);
+
+				} else {
+					AlertDialog.Builder adb = new AlertDialog.Builder(
+							getActivity());
+					adb.setTitle("Google Map");
+					adb.setMessage("Please Provide the Proper Place");
+					adb.setPositiveButton("Close", null);
+					adb.show();
+				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+
+	/*
+	 * If track able than go to the setting page which has google maps
+	 */
+
+	OnClickListener submitLocation = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(getActivity(), WatchMeActivity.class);
+			intent.putExtra(ParseConstants.KEY_LOCATION, myGeoPoints);
+			startActivity(intent);
+		}
+	};
 
 	/*
 	 * Error Dialog Parse

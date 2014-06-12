@@ -7,7 +7,7 @@
     tools:context="com.example.watchin.HomeFragment" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/homeDestinationEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -17,16 +17,16 @@
         android:hint="input your destination" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/homeCheckButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/homeDestinationEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="Submit" />
+        android:text="Check Address" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/homeStep1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -34,5 +34,14 @@
         android:layout_marginTop="74dp"
         android:text="Step 1"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/homeSubmitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/homeSubmitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Watch Me" />
 
 </RelativeLayout>

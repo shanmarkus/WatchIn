@@ -38,12 +38,14 @@
     <string name="friend_information_friend_list_title">Family List</string>
     <string name="title_activity_friend_information">Family Information</string>
     <string name="add_friend_button_follow">Follow</string>
-	<string name="add_friend_username">Username</string>
-	<string name="title_activity_add_friend">Add Family</string>
-	<string name="image_description_testing">Testing image desc</string>
-	<string name="friend_relation_status">Follow</string>
-	<string name="home_username">User name</string>
-	<string name="home_recent_activity_title">User recent activity</string>
-	<string name="title_activity_friend_detail">Family Detail</string>
-	<string name="title_activity_home">Home</string>
+    <string name="add_friend_username">Username</string>
+    <string name="title_activity_add_friend">Add Family</string>
+    <string name="image_description_testing">Testing image desc</string>
+    <string name="friend_relation_status">Follow</string>
+    <string name="home_username">User name</string>
+    <string name="home_recent_activity_title">User recent activity</string>
+    <string name="title_activity_friend_detail">Family Detail</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_activity_watch_me">Watch Me</string>
+
 </resources>
