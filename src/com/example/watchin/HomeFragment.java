@@ -86,14 +86,12 @@ public class HomeFragment extends Fragment {
 
 		// UI Declaration
 
-
 		return rootView;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		getUserInformation();
 	}
 
 	/*
@@ -125,87 +123,6 @@ public class HomeFragment extends Fragment {
 	 */
 
 	// Get All
-
-	private void getUserInformation() {
-		// Set progress dialog
-		initProgressDialog();
-
-		ParseQuery<ParseUser> query = ParseQuery
-				.getQuery(ParseConstants.TABLE_USER);
-		query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, userId);
-		query.getFirstInBackground(new GetCallback<ParseUser>() {
-
-			@Override
-			public void done(ParseUser user, ParseException e) {
-				if (e == null) {
-					// success
-					String userName = user.getString(ParseConstants.KEY_NAME);
-					Integer userFollower = user
-							.getInt(ParseConstants.KEY_FOLLOWER);
-					Integer userFollowing = user
-							.getInt(ParseConstants.KEY_FOLLOWING);
-					Integer userTotalCheckIn = user
-							.getInt(ParseConstants.KEY_TOTAL_CHECK_IN);
-					Integer userTotalClaimedPromotion = user
-							.getInt(ParseConstants.KEY_TOTAL_CLAIMED_PROMOTION);
-					ParseFile userImage = user
-							.getParseFile(ParseConstants.KEY_IMAGE);
-
-					mHomeUserName.setText(userName);
-					mHomeNumberFollower.setText(userFollower + "");
-					mHomeNumberFollowing.setText(userFollowing + "");
-					mHomeNumberCheckIn.setText(userTotalCheckIn + "");
-					mHomeTextClaimedPromotion.setText(userTotalClaimedPromotion
-							+ "");
-					mHomeProfilePicture.setParseFile(userImage);
-
-					// Image Laoder
-					mHomeProfilePicture.loadInBackground(new GetDataCallback() {
-
-						@Override
-						public void done(byte[] arg0, ParseException arg1) {
-							// DO nothing
-
-						}
-					});
-
-					getTotalReward(userId);
-				} else {
-					progressDialog.dismiss();
-					errorAlertDialog(e);
-				}
-			}
-		});
-	}
-
-	/*
-	 * Get Total Reward Point
-	 */
-
-	private void getTotalReward(String userId) {
-
-		ParseObject currentUser = ParseObject.createWithoutData(
-				ParseConstants.TABLE_USER, userId);
-
-		ParseQuery<ParseObject> query = ParseQuery
-				.getQuery(ParseConstants.TABLE_REL_USER_REWARD);
-		query.whereEqualTo(ParseConstants.KEY_USER_ID, currentUser);
-		query.getFirstInBackground(new GetCallback<ParseObject>() {
-
-			@Override
-			public void done(ParseObject relUserReward, ParseException e) {
-				if (e == null) {
-					progressDialog.dismiss();
-					Integer reward = relUserReward
-							.getInt(ParseConstants.KEY_REWARD_POINT);
-					mHomeTextRewardPoints.setText(reward + "");
-				} else {
-					progressDialog.dismiss();
-					errorAlertDialog(e);
-				}
-			}
-		});
-	}
 
 	/*
 	 * Error Dialog Parse
