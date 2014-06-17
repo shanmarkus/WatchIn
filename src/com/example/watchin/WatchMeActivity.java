@@ -19,7 +19,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -70,6 +73,10 @@ public class WatchMeActivity extends ActionBarActivity {
 	public static class PlaceholderFragment extends Fragment implements
 			ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
+		// UI Variables
+		Spinner mTimeSpinner;
+		Button mNextButton;
+
 		// Maps Variables
 		private GoogleMap mMap;
 		private SupportMapFragment fragment;
@@ -90,6 +97,13 @@ public class WatchMeActivity extends ActionBarActivity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_watch_me,
 					container, false);
+
+			// UI Declaration
+			mNextButton = (Button) rootView.findViewById(R.id.nextButton);
+			mTimeSpinner = (Spinner) rootView.findViewById(R.id.timeSpinner);
+
+			// On click listener
+			mNextButton.setOnClickListener(nextButtonListener);
 
 			// Get LatLng Destination
 			getDestPosition();
@@ -138,25 +152,28 @@ public class WatchMeActivity extends ActionBarActivity {
 		 * Get Current Position
 		 */
 
-		protected void getCurrentPosition() {
+		protected LatLng getCurrentPosition() {
 			// Get User Current Location
 			currentLocation = mLocationClient.getLastLocation();
-			destPosition = new LatLng(currentLocation.getLatitude(),
+			sourcePosition = new LatLng(currentLocation.getLatitude(),
 					currentLocation.getLongitude());
+
+			return sourcePosition;
 		}
 
 		/*
 		 * Get The Destination Lat and Lang
 		 */
 
-		protected void getDestPosition() {
+		protected LatLng getDestPosition() {
 			// Get User Destination Location
 			Intent intent = getActivity().getIntent();
 			double[] temp;
 			temp = intent.getDoubleArrayExtra(ParseConstants.KEY_LOCATION);
-			// sourcePosition = new LatLng(temp[0], temp[1]);
+			destPosition = new LatLng(temp[0], temp[1]);
 			Toast.makeText(getActivity(), temp.length + "", Toast.LENGTH_SHORT)
 					.show();
+			return destPosition;
 
 		}
 
@@ -165,10 +182,15 @@ public class WatchMeActivity extends ActionBarActivity {
 		 */
 		protected void drawMaps(LatLng start, LatLng end) {
 
+			start = getCurrentPosition();
+			end = getDestPosition();
+
 			GMapV2Direction md = new GMapV2Direction();
 			Document doc = md.getDocument(start, end,
 					GMapV2Direction.MODE_DRIVING);
 
+			Toast.makeText(getActivity(), doc.toString(), Toast.LENGTH_SHORT)
+					.show();
 			ArrayList<LatLng> directionPoint = md.getDirection(doc);
 			PolylineOptions rectLine = new PolylineOptions().width(3).color(
 					Color.RED);
@@ -176,8 +198,20 @@ public class WatchMeActivity extends ActionBarActivity {
 			for (int i = 0; i < directionPoint.size(); i++) {
 				rectLine.add(directionPoint.get(i));
 			}
+			mMap.addPolyline(rectLine);
 			Polyline polylin = mMap.addPolyline(rectLine);
 
+		}
+
+		/*
+		 * Draw route if all connected
+		 */
+
+		protected void drawRoute(LatLng start, LatLng end) {
+			start = getCurrentPosition();
+			end = getDestPosition();
+
+			drawMaps(sourcePosition, destPosition);
 		}
 
 		// Check GPS
@@ -208,6 +242,31 @@ public class WatchMeActivity extends ActionBarActivity {
 		}
 
 		/*
+		 * Go to watchMeCheckIn class
+		 */
+
+		private void goToCheckInClass(Integer duration) {
+			Intent intent = new Intent(getActivity(), CheckIn.class);
+			intent.putExtra(ParseConstants.KEY_START_DATE, duration);
+			intent.putExtra(ParseConstants.KEY_LOCATION, destPosition);
+			startActivity(intent);
+			getActivity().finish();
+		}
+
+		/*
+		 * On Click Listener for next button
+		 */
+
+		OnClickListener nextButtonListener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Integer duration = (Integer) mTimeSpinner.getSelectedItem();
+				goToCheckInClass(duration);
+			}
+		};
+
+		/*
 		 * Map Functionality
 		 */
 
@@ -226,6 +285,18 @@ public class WatchMeActivity extends ActionBarActivity {
 		@Override
 		public void onConnected(Bundle connectionHint) {
 			mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
+			Toast.makeText(getActivity(), "Connected", Toast.LENGTH_SHORT)
+					.show();
+
+			sourcePosition = getCurrentPosition();
+			destPosition = getDestPosition();
+			Toast.makeText(getActivity(), sourcePosition.toString(),
+					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), destPosition.toString(),
+					Toast.LENGTH_SHORT).show();
+
+			// Draw routes to the maps
+			// drawMaps(sourcePosition, destPosition);
 		}
 
 		@Override

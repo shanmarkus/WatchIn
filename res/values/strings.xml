@@ -55,4 +55,6 @@
         <item>60</item>
     </string-array>
 
+    <string name="title_activity_check_in">CheckIn</string>
+
 </resources>

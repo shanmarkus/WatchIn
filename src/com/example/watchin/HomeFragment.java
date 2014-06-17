@@ -179,14 +179,15 @@ public class HomeFragment extends Fragment {
 
 				if (addresses.size() > 0) {
 					myGeoPoints = new double[addresses.size() + 1];
+
 					p = new GeoPoint(
 							(int) (addresses.get(0).getLatitude() * 1E6),
 							(int) (addresses.get(0).getLongitude() * 1E6));
 					mHomeDestinationEditText.setText("");
 
-					// add to arraylist
-					Double tempLat = p.getLatitudeE6() * -1E6;
-					Double tempLong = p.getLongitudeE6() * -1E6;
+					// add to array
+					Double tempLat = addresses.get(0).getLatitude();
+					Double tempLong = addresses.get(0).getLongitude();
 
 					myGeoPoints[0] = tempLat;
 					myGeoPoints[1] = tempLong;
