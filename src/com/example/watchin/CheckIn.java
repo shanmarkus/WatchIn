@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -71,9 +72,14 @@ public class CheckIn extends ActionBarActivity {
 			ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
 		// Initiate the UI
-		Chronometer mChronometer;
+		Chronometer chronometer;
 
-		// Maps Variables
+		// Chronometer Variables
+		long timeWhenStopped = 0;
+
+		// Variables
+		int duration;
+
 		// Maps Variables
 		private GoogleMap mMap;
 		private SupportMapFragment fragment;
@@ -100,8 +106,11 @@ public class CheckIn extends ActionBarActivity {
 					.getSystemService(Context.LOCATION_SERVICE);
 
 			// Initiate UI
-			mChronometer = (Chronometer) rootView
+			chronometer = (Chronometer) rootView
 					.findViewById(R.id.chronometer1);
+
+			// Other function
+			getDuration();
 
 			return rootView;
 		}
@@ -133,8 +142,32 @@ public class CheckIn extends ActionBarActivity {
 		 * Added Function
 		 */
 
+		// getter from previous intent
+
+		public Integer getDuration() {
+			duration = getActivity().getIntent().getIntExtra(
+					ParseConstants.KEY_START_DATE, 30);
+			return duration;
+		}
+		
+		public LatLng getDestLocation(){
+			return destPosition;
+			
+		}
+
+		// Main Stuff ??
+
+		private void watchMe() {
+			startChronometer();
+			Location location = mLocationClient.getLastLocation();
+			int longmilis = duration * 60000;
+
+		}
+
+		// get duration
+
+		// Save user last position
 		private void saveUserLastLocation(Location location) {
-			location = mLocationClient.getLastLocation();
 			final ParseGeoPoint temp = new ParseGeoPoint(
 					location.getLatitude(), location.getLongitude());
 			ParseUser user = ParseUser.getCurrentUser();
@@ -166,6 +199,31 @@ public class CheckIn extends ActionBarActivity {
 					.setPositiveButton(android.R.string.ok, null);
 			AlertDialog dialog = builder.create();
 			dialog.show();
+		}
+
+		/*
+		 * Chronometer Function
+		 */
+
+		// Start Chronometer
+		public void startChronometer() {
+			chronometer
+					.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+			chronometer.start();
+
+		}
+
+		// Reset Chronometer
+		public void resetChronometer() {
+			chronometer.setBase(SystemClock.elapsedRealtime());
+			timeWhenStopped = 0;
+		}
+
+		// Stop Chronometer
+		public void stopChronometer() {
+			timeWhenStopped = chronometer.getBase()
+					- SystemClock.elapsedRealtime();
+			chronometer.stop();
 		}
 
 		/*
