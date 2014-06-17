@@ -199,7 +199,6 @@ public class WatchMeActivity extends ActionBarActivity {
 				rectLine.add(directionPoint.get(i));
 			}
 			mMap.addPolyline(rectLine);
-			Polyline polylin = mMap.addPolyline(rectLine);
 
 		}
 
