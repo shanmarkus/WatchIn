@@ -2,6 +2,7 @@ package com.example.watchin;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -111,6 +112,8 @@ public class CheckIn extends ActionBarActivity {
 
 			// Other function
 			getDuration();
+			getDestLocation();
+			watchMe();
 
 			return rootView;
 		}
@@ -149,18 +152,37 @@ public class CheckIn extends ActionBarActivity {
 					ParseConstants.KEY_START_DATE, 30);
 			return duration;
 		}
-		
-		public LatLng getDestLocation(){
+
+		public LatLng getDestLocation() {
+			Intent intent = getActivity().getIntent();
+			double[] temp;
+			temp = intent.getDoubleArrayExtra(ParseConstants.KEY_LOCATION);
+			destPosition = new LatLng(temp[0], temp[1]);
 			return destPosition;
-			
+
 		}
 
 		// Main Stuff ??
 
 		private void watchMe() {
+			// Start Chronometer
 			startChronometer();
+
+			// Set Location
 			Location location = mLocationClient.getLastLocation();
+			Location tempLocation = new Location("");
+			tempLocation.setLatitude(destPosition.latitude);
+			tempLocation.setLongitude(destPosition.longitude);
+
 			int longmilis = duration * 60000;
+
+			// logic flow
+			// 1.check distance dulu baru timer ? ato
+			// 2.timer dulu baru distance
+
+			while (chronometer.isActivated()) {
+				Log.d(TAG, "chronometer activated");
+			}
 
 		}
 

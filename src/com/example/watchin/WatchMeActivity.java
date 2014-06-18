@@ -31,6 +31,8 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -146,6 +148,14 @@ public class WatchMeActivity extends ActionBarActivity {
 			}
 		}
 
+		@Override
+		public void onPause() {
+			super.onPause();
+			if (mLocationClient != null) {
+				mLocationClient.disconnect();
+			}
+		}
+
 		// Added function
 
 		/*
@@ -153,6 +163,9 @@ public class WatchMeActivity extends ActionBarActivity {
 		 */
 
 		protected LatLng getCurrentPosition() {
+			if (mLocationClient.isConnected() == false) {
+				mLocationClient.connect();
+			}
 			// Get User Current Location
 			currentLocation = mLocationClient.getLastLocation();
 			sourcePosition = new LatLng(currentLocation.getLatitude(),
@@ -185,20 +198,25 @@ public class WatchMeActivity extends ActionBarActivity {
 			start = getCurrentPosition();
 			end = getDestPosition();
 
+			Toast.makeText(getActivity(), "Start" + start.toString(),
+					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "end" + end.toString(),
+					Toast.LENGTH_SHORT).show();
+
 			GMapV2Direction md = new GMapV2Direction();
 			Document doc = md.getDocument(start, end,
 					GMapV2Direction.MODE_DRIVING);
 
 			Toast.makeText(getActivity(), doc.toString(), Toast.LENGTH_SHORT)
 					.show();
-			ArrayList<LatLng> directionPoint = md.getDirection(doc);
-			PolylineOptions rectLine = new PolylineOptions().width(3).color(
-					Color.RED);
-
-			for (int i = 0; i < directionPoint.size(); i++) {
-				rectLine.add(directionPoint.get(i));
-			}
-			mMap.addPolyline(rectLine);
+			// ArrayList<LatLng> directionPoint = md.getDirection(doc);
+			// PolylineOptions rectLine = new PolylineOptions().width(3).color(
+			// Color.RED);
+			//
+			// for (int i = 0; i < directionPoint.size(); i++) {
+			// rectLine.add(directionPoint.get(i));
+			// }
+			// mMap.addPolyline(rectLine);
 
 		}
 
@@ -295,7 +313,19 @@ public class WatchMeActivity extends ActionBarActivity {
 					Toast.LENGTH_SHORT).show();
 
 			// Draw routes to the maps
-			// drawMaps(sourcePosition, destPosition);
+			drawMaps(sourcePosition, destPosition);
+
+			Location temp = mLocationClient.getLastLocation();
+			mapZoom(temp);
+		}
+
+		private void mapZoom(Location location) {
+			currentLocation = location;
+			LatLng latLng = new LatLng(location.getLatitude(),
+					location.getLongitude());
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+					latLng, 15);
+			mMap.animateCamera(cameraUpdate);
 		}
 
 		@Override
