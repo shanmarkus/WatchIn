@@ -1200,11 +1200,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f060026;
         public static final int action_bar_title=0x7f060025;
         public static final int action_context_bar=0x7f060020;
-        public static final int action_example=0x7f06005e;
+        public static final int action_example=0x7f06005f;
         public static final int action_menu_divider=0x7f060019;
         public static final int action_menu_presenter=0x7f06001a;
         public static final int action_mode_close_button=0x7f060027;
-        public static final int action_settings=0x7f06005d;
+        public static final int action_settings=0x7f06005e;
         public static final int activity_chooser_view_content=0x7f060028;
         public static final int always=0x7f06000f;
         public static final int beginning=0x7f060014;
@@ -1239,7 +1239,7 @@ containing a value of this type.
         public static final int listFriend=0x7f060052;
         public static final int listMode=0x7f060005;
         public static final int list_item=0x7f06002c;
-        public static final int loginButton=0x7f06005c;
+        public static final int loginButton=0x7f06005d;
         public static final int map=0x7f060048;
         public static final int middle=0x7f060015;
         public static final int navigation_drawer=0x7f060042;
@@ -1248,7 +1248,7 @@ containing a value of this type.
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
         public static final int pager=0x7f060040;
-        public static final int passwordField=0x7f06005b;
+        public static final int passwordField=0x7f06005c;
         public static final int progress_circular=0x7f06001b;
         public static final int progress_horizontal=0x7f06001c;
         public static final int radio=0x7f060032;
@@ -1278,12 +1278,13 @@ containing a value of this type.
         public static final int textRecentActivityTitle=0x7f06004c;
         public static final int textTitleFollowing=0x7f060051;
         public static final int textUserName=0x7f060045;
+        public static final int textView1=0x7f06005a;
         public static final int timeSpinner=0x7f060058;
         public static final int title=0x7f06002e;
         public static final int top_action_bar=0x7f060023;
         public static final int up=0x7f060024;
         public static final int useLogo=0x7f060007;
-        public static final int usernameField=0x7f06005a;
+        public static final int usernameField=0x7f06005b;
         public static final int withText=0x7f060010;
     }
     public static final class integer {
