@@ -173,10 +173,6 @@ public class HomeFragment extends Fragment {
 			try {
 				addresses = geoCoder.getFromLocationName(temp, 1);
 
-				while (addresses.size() == 0) {
-					addresses = geoCoder.getFromLocationName(temp, 1);
-				}
-
 				if (addresses.size() > 0) {
 					myGeoPoints = new double[addresses.size() + 1];
 
@@ -203,6 +199,11 @@ public class HomeFragment extends Fragment {
 					mHomeSubmitButton.setOnClickListener(submitLocation);
 
 				} else {
+
+					// Setup UI
+					mHomeSubmitButton.setEnabled(false);
+
+					// Set Error Dialog
 					AlertDialog.Builder adb = new AlertDialog.Builder(
 							getActivity());
 					adb.setTitle("Google Map");

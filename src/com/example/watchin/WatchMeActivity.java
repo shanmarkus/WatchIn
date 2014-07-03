@@ -1,14 +1,11 @@
 package com.example.watchin;
 
-import java.util.ArrayList;
-
 import org.w3c.dom.Document;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -36,8 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WatchMeActivity extends ActionBarActivity {
 
@@ -202,21 +197,6 @@ public class WatchMeActivity extends ActionBarActivity {
 					Toast.LENGTH_SHORT).show();
 			Toast.makeText(getActivity(), "end" + end.toString(),
 					Toast.LENGTH_SHORT).show();
-
-			GMapV2Direction md = new GMapV2Direction();
-			Document doc = md.getDocument(start, end,
-					GMapV2Direction.MODE_DRIVING);
-
-			Toast.makeText(getActivity(), doc.toString(), Toast.LENGTH_SHORT)
-					.show();
-			// ArrayList<LatLng> directionPoint = md.getDirection(doc);
-			// PolylineOptions rectLine = new PolylineOptions().width(3).color(
-			// Color.RED);
-			//
-			// for (int i = 0; i < directionPoint.size(); i++) {
-			// rectLine.add(directionPoint.get(i));
-			// }
-			// mMap.addPolyline(rectLine);
 
 		}
 
