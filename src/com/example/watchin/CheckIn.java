@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -74,6 +76,8 @@ public class CheckIn extends ActionBarActivity {
 
 		// Initiate the UI
 		Chronometer chronometer;
+		TextView mTextViewTimeLeft;
+		TextView mTextViewMinutes;
 
 		// Chronometer Variables
 		long timeWhenStopped = 0;
@@ -92,6 +96,7 @@ public class CheckIn extends ActionBarActivity {
 
 		LatLng sourcePosition;
 		LatLng destPosition;
+		final Location tempLocation = new Location("");
 
 		public PlaceholderFragment() {
 		}
@@ -107,12 +112,22 @@ public class CheckIn extends ActionBarActivity {
 					.getSystemService(Context.LOCATION_SERVICE);
 
 			// Initiate UI
-			chronometer = (Chronometer) rootView
-					.findViewById(R.id.chronometer1);
+			// chronometer = (Chronometer) rootView
+			// .findViewById(R.id.chronometer1);
+
+			mTextViewMinutes = (TextView) rootView
+					.findViewById(R.id.textViewMinutes);
+			mTextViewTimeLeft = (TextView) rootView
+					.findViewById(R.id.textViewTimeLeft);
+
+			tempLocation.setLatitude(destPosition.latitude);
+			tempLocation.setLongitude(destPosition.longitude);
 
 			// Other function
 			getDuration();
 			getDestLocation();
+
+			mTextViewTimeLeft.setText(duration + "");
 
 			// Debug
 			Toast.makeText(getActivity(), duration + " ", Toast.LENGTH_SHORT)
@@ -133,6 +148,7 @@ public class CheckIn extends ActionBarActivity {
 			mMap.clear();
 			setUpLocationClientIfNeeded();
 			mLocationClient.connect();
+
 		}
 
 		@Override
@@ -170,14 +186,9 @@ public class CheckIn extends ActionBarActivity {
 		// Main Stuff ??
 
 		private void watchMe() {
-			// Start Chronometer
-			startChronometer();
 
 			// Set Location
-			Location location = mLocationClient.getLastLocation();
-			Location tempLocation = new Location("");
-			tempLocation.setLatitude(destPosition.latitude);
-			tempLocation.setLongitude(destPosition.longitude);
+			final Location location = mLocationClient.getLastLocation();
 
 			int longmilis = duration * 60000;
 
@@ -185,9 +196,29 @@ public class CheckIn extends ActionBarActivity {
 			// 1.check distance dulu baru timer ? ato
 			// 2.timer dulu baru distance
 
-			while (chronometer.isActivated()) {
-				Log.d(TAG, "chronometer activated");
-			}
+			new CountDownTimer(longmilis, 1000) {
+
+				public void onTick(long millisUntilFinished) {
+					Toast.makeText(getActivity(), millisUntilFinished + " ",
+							Toast.LENGTH_SHORT).show();
+					int minutes = (int) (millisUntilFinished) / 60000;
+					int seconds = (int) (millisUntilFinished - minutes * 60000) / 1000;
+					mTextViewTimeLeft.setText(minutes + " : " + seconds);
+
+				}
+
+				public void onFinish() {
+					// Save user location
+					saveUserLastLocation(location);
+
+					// check if user already near the target location or not
+					if (location.distanceTo(tempLocation) < 100) {
+						// user already near the location
+					} else {
+						// prompt alert dialog
+					}
+				}
+			}.start();
 
 		}
 
@@ -232,26 +263,26 @@ public class CheckIn extends ActionBarActivity {
 		 * Chronometer Function
 		 */
 
-		// Start Chronometer
-		public void startChronometer() {
-			chronometer
-					.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-			chronometer.start();
-
-		}
-
-		// Reset Chronometer
-		public void resetChronometer() {
-			chronometer.setBase(SystemClock.elapsedRealtime());
-			timeWhenStopped = 0;
-		}
-
-		// Stop Chronometer
-		public void stopChronometer() {
-			timeWhenStopped = chronometer.getBase()
-					- SystemClock.elapsedRealtime();
-			chronometer.stop();
-		}
+		// // Start Chronometer
+		// public void startChronometer() {
+		// chronometer
+		// .setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+		// chronometer.start();
+		//
+		// }
+		//
+		// // Reset Chronometer
+		// public void resetChronometer() {
+		// chronometer.setBase(SystemClock.elapsedRealtime());
+		// timeWhenStopped = 0;
+		// }
+		//
+		// // Stop Chronometer
+		// public void stopChronometer() {
+		// timeWhenStopped = chronometer.getBase()
+		// - SystemClock.elapsedRealtime();
+		// chronometer.stop();
+		// }
 
 		/*
 		 * Map Functionality
@@ -281,7 +312,8 @@ public class CheckIn extends ActionBarActivity {
 			mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
 			Toast.makeText(getActivity(), "Connected", Toast.LENGTH_SHORT)
 					.show();
-
+			// run main function
+			watchMe();
 		}
 
 		@Override

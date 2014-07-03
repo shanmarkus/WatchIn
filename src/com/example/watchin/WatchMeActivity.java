@@ -34,7 +34,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.parse.Parse;
 
 public class WatchMeActivity extends ActionBarActivity {
 
@@ -181,8 +180,6 @@ public class WatchMeActivity extends ActionBarActivity {
 			double[] temp;
 			temp = intent.getDoubleArrayExtra(ParseConstants.KEY_LOCATION);
 			destPosition = new LatLng(temp[0], temp[1]);
-			Toast.makeText(getActivity(), temp.length + "", Toast.LENGTH_SHORT)
-					.show();
 			return destPosition;
 
 		}
@@ -191,21 +188,12 @@ public class WatchMeActivity extends ActionBarActivity {
 		 * Drawing Route to the Maps
 		 */
 		protected void drawMaps(LatLng start, LatLng end) {
-
 			start = getCurrentPosition();
 			end = getDestPosition();
-
-			Toast.makeText(getActivity(), "Start" + start.toString(),
-					Toast.LENGTH_SHORT).show();
-			Toast.makeText(getActivity(), "end" + end.toString(),
-					Toast.LENGTH_SHORT).show();
-
 			mMap.addPolyline(new PolylineOptions().add(start).add(end).width(4)
 					.color(Color.RED));
-
 			mMap.addMarker(new MarkerOptions().position(end).title(
 					"Destination"));
-
 		}
 
 		// /*
@@ -295,12 +283,9 @@ public class WatchMeActivity extends ActionBarActivity {
 			Toast.makeText(getActivity(), "Connected", Toast.LENGTH_SHORT)
 					.show();
 
+			// Get Variables
 			sourcePosition = getCurrentPosition();
 			destPosition = getDestPosition();
-			Toast.makeText(getActivity(), sourcePosition.toString(),
-					Toast.LENGTH_SHORT).show();
-			Toast.makeText(getActivity(), destPosition.toString(),
-					Toast.LENGTH_SHORT).show();
 
 			// Draw routes to the maps
 			drawMaps(sourcePosition, destPosition);
