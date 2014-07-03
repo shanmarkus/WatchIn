@@ -112,8 +112,6 @@ public class CheckIn extends ActionBarActivity {
 
 			// Other function
 			getDuration();
-			getDestLocation();
-			watchMe();
 
 			return rootView;
 		}

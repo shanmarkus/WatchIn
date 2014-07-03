@@ -34,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.Parse;
 
 public class WatchMeActivity extends ActionBarActivity {
 
@@ -265,8 +266,8 @@ public class WatchMeActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				Integer duration = (Integer) mTimeSpinner.getSelectedItem();
-				goToCheckInClass(duration);
+				String duration = (String) mTimeSpinner.getSelectedItem();
+				goToCheckInClass(Integer.parseInt(duration));
 			}
 		};
 
