@@ -1,13 +1,21 @@
 package com.example.watchin;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -30,9 +38,11 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -84,6 +94,9 @@ public class CheckIn extends ActionBarActivity {
 
 		// Variables
 		int duration;
+		boolean isCheckIn;
+		ArrayList<Integer> familyPhonesNumber = new ArrayList<Integer>();
+		String address;
 
 		// Maps Variables
 		private GoogleMap mMap;
@@ -186,17 +199,29 @@ public class CheckIn extends ActionBarActivity {
 		// Main Stuff ??
 
 		private void watchMe() {
+			int longmilis = duration * 60000;
 
 			// Set Location
 			final Location location = mLocationClient.getLastLocation();
 
-			int longmilis = duration * 60000;
+			// decode the address
+			Geocoder geocoder;
+			List<Address> addresses;
+			geocoder = new Geocoder(getActivity(), Locale.getDefault());
+			try {
+				addresses = geocoder.getFromLocation(location.getLatitude(),
+						location.getLongitude(), 1);
+				address = addresses.get(0).getAddressLine(0);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			// logic flow
 			// 1.check distance dulu baru timer ? ato
 			// 2.timer dulu baru distance
 
-			new CountDownTimer(longmilis, 1000) {
+			new CountDownTimer(30000, 1000) {
 
 				public void onTick(long millisUntilFinished) {
 					Toast.makeText(getActivity(), millisUntilFinished + " ",
@@ -215,14 +240,97 @@ public class CheckIn extends ActionBarActivity {
 					if (location.distanceTo(tempLocation) < 100) {
 						// user already near the location
 					} else {
-						// prompt alert dialog
+						isCheckIn = false;
+
+						// prompt alert dialog for check in
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								getActivity());
+						builder.setMessage("Check In Mutha Fukka !")
+								.setPositiveButton("Yes",
+										dialogInnerClickListener).show();
+						CountDownTimer inner = new CountDownTimer(15000, 1000) {
+							@Override
+							public void onTick(long millisUntilFinished) {
+								// do nothing
+							}
+
+							@Override
+							public void onFinish() {
+								if (isCheckIn == true) {
+									// start over
+									Toast.makeText(getActivity(),
+											isCheckIn + " ", Toast.LENGTH_SHORT)
+											.show();
+									watchMe();
+								} else {
+									// warn the family
+									Toast.makeText(getActivity(),
+											isCheckIn + " ", Toast.LENGTH_SHORT)
+											.show();
+									warnTheOther();
+								}
+							}
+
+						};
+						inner.start();
 					}
 				}
 			}.start();
 
 		}
 
-		// get duration
+		// Warn the OTHER !!!
+
+		private void warnTheOther() {
+			String userId = ParseUser.getCurrentUser().getObjectId();
+			final String userName = ParseUser.getCurrentUser().getString(
+					ParseConstants.KEY_NAME);
+			ParseQuery<ParseObject> query = ParseQuery
+					.getQuery(ParseConstants.TABLE_REL_USER_USER);
+			query.whereEqualTo(ParseConstants.KEY_USER_ID, userId);
+			query.include(ParseConstants.KEY_FOLLOWING);
+			query.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					if (e == null) {
+						for (ParseObject object : objects) {
+							ParseObject user = object
+									.getParseObject(ParseConstants.KEY_FOLLOWING);
+							String phoneNumber = user
+									.getString(ParseConstants.KEY_PHONE);
+							String message = "Hey !! " + userName
+									+ " seems missing from our grid, "
+									+ "his/her last position are in " + address;
+
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri
+									.parse(message
+											+ Integer.parseInt(phoneNumber))));
+						}
+
+					} else {
+						errorAlertDialog(e);
+					}
+				}
+			});
+		}
+
+		// Dialog Box Action Listener
+
+		DialogInterface.OnClickListener dialogInnerClickListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					isCheckIn = true;
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					// Do nothing
+					break;
+				}
+			}
+		};
 
 		// Save user last position
 		private void saveUserLastLocation(Location location) {
