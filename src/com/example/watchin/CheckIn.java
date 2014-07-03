@@ -133,12 +133,12 @@ public class CheckIn extends ActionBarActivity {
 			mTextViewTimeLeft = (TextView) rootView
 					.findViewById(R.id.textViewTimeLeft);
 
-			tempLocation.setLatitude(destPosition.latitude);
-			tempLocation.setLongitude(destPosition.longitude);
-
 			// Other function
 			getDuration();
 			getDestLocation();
+
+			tempLocation.setLatitude(destPosition.latitude);
+			tempLocation.setLongitude(destPosition.longitude);
 
 			mTextViewTimeLeft.setText(duration + "");
 
