@@ -224,8 +224,6 @@ public class CheckIn extends ActionBarActivity {
 			new CountDownTimer(30000, 1000) {
 
 				public void onTick(long millisUntilFinished) {
-					Toast.makeText(getActivity(), millisUntilFinished + " ",
-							Toast.LENGTH_SHORT).show();
 					int minutes = (int) (millisUntilFinished) / 60000;
 					int seconds = (int) (millisUntilFinished - minutes * 60000) / 1000;
 					mTextViewTimeLeft.setText(minutes + " : " + seconds);
@@ -303,9 +301,12 @@ public class CheckIn extends ActionBarActivity {
 									+ " seems missing from our grid, "
 									+ "his/her last position are in " + address;
 
-							startActivity(new Intent(Intent.ACTION_VIEW, Uri
-									.parse(message
-											+ Integer.parseInt(phoneNumber))));
+							Toast.makeText(getActivity(),
+									phoneNumber + "-" + message,
+									Toast.LENGTH_SHORT).show();
+							// startActivity(new Intent(Intent.ACTION_VIEW, Uri
+							// .parse(message
+							// + Integer.parseInt(phoneNumber))));
 						}
 
 					} else {
@@ -344,9 +345,11 @@ public class CheckIn extends ActionBarActivity {
 						@Override
 						public void done(ParseUser currentUser, ParseException e) {
 							if (e == null) {
-								currentUser.add(ParseConstants.KEY_LOCATION,
+								currentUser.put(ParseConstants.KEY_LOCATION,
 										temp);
 								currentUser.saveEventually();
+								Toast.makeText(getActivity(), "save location",
+										Toast.LENGTH_SHORT).show();
 							} else {
 								errorAlertDialog(e);
 							}
@@ -366,31 +369,6 @@ public class CheckIn extends ActionBarActivity {
 			AlertDialog dialog = builder.create();
 			dialog.show();
 		}
-
-		/*
-		 * Chronometer Function
-		 */
-
-		// // Start Chronometer
-		// public void startChronometer() {
-		// chronometer
-		// .setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-		// chronometer.start();
-		//
-		// }
-		//
-		// // Reset Chronometer
-		// public void resetChronometer() {
-		// chronometer.setBase(SystemClock.elapsedRealtime());
-		// timeWhenStopped = 0;
-		// }
-		//
-		// // Stop Chronometer
-		// public void stopChronometer() {
-		// timeWhenStopped = chronometer.getBase()
-		// - SystemClock.elapsedRealtime();
-		// chronometer.stop();
-		// }
 
 		/*
 		 * Map Functionality
