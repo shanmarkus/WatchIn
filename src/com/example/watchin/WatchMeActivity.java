@@ -1,11 +1,10 @@
 package com.example.watchin;
 
-import org.w3c.dom.Document;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -33,6 +32,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WatchMeActivity extends ActionBarActivity {
 
@@ -198,18 +199,24 @@ public class WatchMeActivity extends ActionBarActivity {
 			Toast.makeText(getActivity(), "end" + end.toString(),
 					Toast.LENGTH_SHORT).show();
 
+			mMap.addPolyline(new PolylineOptions().add(start).add(end).width(4)
+					.color(Color.RED));
+
+			mMap.addMarker(new MarkerOptions().position(end).title(
+					"Destination"));
+
 		}
 
-		/*
-		 * Draw route if all connected
-		 */
-
-		protected void drawRoute(LatLng start, LatLng end) {
-			start = getCurrentPosition();
-			end = getDestPosition();
-
-			drawMaps(sourcePosition, destPosition);
-		}
+		// /*
+		// * Draw route if all connected
+		// */
+		//
+		// protected void drawRoute(LatLng start, LatLng end) {
+		// start = getCurrentPosition();
+		// end = getDestPosition();
+		//
+		// drawMaps(sourcePosition, destPosition);
+		// }
 
 		// Check GPS
 		private void showGPSDisabledAlertToUser() {
@@ -304,7 +311,7 @@ public class WatchMeActivity extends ActionBarActivity {
 			LatLng latLng = new LatLng(location.getLatitude(),
 					location.getLongitude());
 			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-					latLng, 15);
+					latLng, 10);
 			mMap.animateCamera(cameraUpdate);
 		}
 
