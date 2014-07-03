@@ -112,6 +112,13 @@ public class CheckIn extends ActionBarActivity {
 
 			// Other function
 			getDuration();
+			getDestLocation();
+
+			// Debug
+			Toast.makeText(getActivity(), duration + " ", Toast.LENGTH_SHORT)
+					.show();
+			Toast.makeText(getActivity(), destPosition.toString(),
+					Toast.LENGTH_SHORT).show();
 
 			return rootView;
 		}

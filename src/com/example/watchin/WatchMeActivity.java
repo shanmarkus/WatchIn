@@ -253,9 +253,11 @@ public class WatchMeActivity extends ActionBarActivity {
 		private void goToCheckInClass(Integer duration) {
 			Intent intent = new Intent(getActivity(), CheckIn.class);
 			intent.putExtra(ParseConstants.KEY_START_DATE, duration);
-			intent.putExtra(ParseConstants.KEY_LOCATION, destPosition);
+			double[] temp;
+			Intent prevIntent = getActivity().getIntent();
+			temp = prevIntent.getDoubleArrayExtra(ParseConstants.KEY_LOCATION);
+			intent.putExtra(ParseConstants.KEY_LOCATION, temp);
 			startActivity(intent);
-			getActivity().finish();
 		}
 
 		/*
