@@ -35,6 +35,8 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -103,6 +105,7 @@ public class CheckIn extends ActionBarActivity {
 		private SupportMapFragment fragment;
 		private LocationClient mLocationClient;
 		private Location currentLocation = null;
+		private Location mLastLocation;
 		private static final LocationRequest REQUEST = LocationRequest.create()
 				.setFastestInterval(1000) // 16ms = 60fps
 				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -196,7 +199,7 @@ public class CheckIn extends ActionBarActivity {
 
 		}
 
-		// Main Stuff ??
+		// Main Algorithm
 
 		private void watchMe() {
 			int longmilis = duration * 60000;
@@ -217,10 +220,9 @@ public class CheckIn extends ActionBarActivity {
 				e.printStackTrace();
 			}
 
-			// logic flow
-			// 1.check distance dulu baru timer ? ato
-			// 2.timer dulu baru distance
+			mTextViewMinutes.setText("Time left for check-in");
 
+			// init outer countdown timer
 			new CountDownTimer(30000, 1000) {
 
 				public void onTick(long millisUntilFinished) {
@@ -231,6 +233,8 @@ public class CheckIn extends ActionBarActivity {
 				}
 
 				public void onFinish() {
+					float distanceLeft = location.distanceTo(tempLocation);
+
 					// Save user location
 					saveUserLastLocation(location);
 
@@ -243,13 +247,22 @@ public class CheckIn extends ActionBarActivity {
 						// prompt alert dialog for check in
 						AlertDialog.Builder builder = new AlertDialog.Builder(
 								getActivity());
-						builder.setMessage("Check In Mutha Fukka !")
+						builder.setMessage(
+								"Check In Mutha Fukka !"
+										+ " you will arrive at your destination in "
+										+ distanceLeft + " meters")
 								.setPositiveButton("Yes",
 										dialogInnerClickListener).show();
+
+						// Change The UI
+						mTextViewMinutes.setText("seconds to check in");
+
+						// init inner countdown timer
 						CountDownTimer inner = new CountDownTimer(15000, 1000) {
 							@Override
 							public void onTick(long millisUntilFinished) {
-								// do nothing
+								mTextViewTimeLeft.setText(millisUntilFinished
+										/ 1000 + "");
 							}
 
 							@Override
@@ -298,7 +311,7 @@ public class CheckIn extends ActionBarActivity {
 							String phoneNumber = user
 									.getString(ParseConstants.KEY_PHONE);
 							String message = "Hey !! " + userName
-									+ " seems missing from our grid, "
+									+ " is missing from our grid, "
 									+ "his/her last position are in " + address;
 
 							Toast.makeText(getActivity(),
@@ -308,6 +321,11 @@ public class CheckIn extends ActionBarActivity {
 							// .parse(message
 							// + Integer.parseInt(phoneNumber))));
 						}
+
+						Intent intent = new Intent(getActivity(),
+								DangerActivity.class);
+						startActivity(intent);
+						getActivity().finish();
 
 					} else {
 						errorAlertDialog(e);
@@ -382,8 +400,15 @@ public class CheckIn extends ActionBarActivity {
 		}
 
 		@Override
-		public void onLocationChanged(Location arg0) {
-			// TODO Auto-generated method stub
+		public void onLocationChanged(Location location) {
+			LatLng latLng = new LatLng(location.getLatitude(),
+					location.getLongitude());
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+					latLng, 17);
+			mMap.animateCamera(cameraUpdate);
+
+			if (mLastLocation == null)
+				mLastLocation = location;
 
 		}
 
