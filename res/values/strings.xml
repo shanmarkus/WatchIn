@@ -56,5 +56,6 @@
     </string-array>
 
     <string name="title_activity_check_in">CheckIn</string>
+    <string name="title_activity_danger">Help is Coming !!</string>
 
 </resources>

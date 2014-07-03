@@ -16,9 +16,10 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
-        android:name="com.example.watchin.ParseApplication"
+        android:name=".ParseApplication"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" android:theme="@style/Theme.AppCompat">
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat" >
         <uses-library android:name="com.google.android.maps" />
 
         <meta-data
@@ -29,7 +30,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.example.watchin.ParseStarterProjectActivity"
+            android:name=".ParseStarterProjectActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,50 +39,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.watchin.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.AppCompat" >
         </activity>
         <activity
-            android:name="com.example.watchin.FriendInformation"
+            android:name=".FriendInformation"
             android:label="@string/title_activity_friend_information"
-            android:parentActivityName="com.example.watchin.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.watchin.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.watchin.AddFriend"
+            android:name=".AddFriend"
             android:label="@string/title_activity_add_friend"
-            android:parentActivityName="com.example.watchin.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.watchin.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.watchin.FriendDetail"
+            android:name=".FriendDetail"
             android:label="@string/title_activity_friend_detail"
-            android:parentActivityName="com.example.watchin.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.watchin.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.watchin.HomeActivity"
+            android:name=".HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
         <activity
-            android:name="com.example.watchin.WatchMeActivity"
+            android:name=".WatchMeActivity"
             android:label="@string/title_activity_watch_me"
-            android:parentActivityName="com.example.watchin.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.watchin.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.watchin.CheckIn"
-            android:label="@string/title_activity_check_in" android:theme="@style/Theme.AppCompat">
+            android:name=".CheckIn"
+            android:label="@string/title_activity_check_in"
+            android:theme="@style/Theme.AppCompat" >
+        </activity>
+        <activity
+            android:name=".DangerActivity"
+            android:label="@string/title_activity_danger" >
         </activity>
     </application>
 
