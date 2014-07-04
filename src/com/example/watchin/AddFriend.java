@@ -74,10 +74,9 @@ public class AddFriend extends ActionBarActivity {
 		boolean isAlreadyFollow;
 		String userId = ParseUser.getCurrentUser().getObjectId();
 		ProgressDialog progressDialog;
+		String friendObjId;
 
 		// ParseConstant
-		ParseObject currentUser = ParseObject.createWithoutData(
-				ParseConstants.TABLE_USER, userId);
 		ParseObject friendObj;
 		ParseImageView mImageViewFriend;
 
@@ -178,8 +177,8 @@ public class AddFriend extends ActionBarActivity {
 			findFriendDetail();
 			ParseQuery<ParseObject> query = ParseQuery
 					.getQuery(ParseConstants.TABLE_REL_USER_USER);
-			query.whereEqualTo(ParseConstants.KEY_USER_ID, currentUser);
-			query.whereEqualTo(ParseConstants.KEY_FOLLOWING_ID, friendObj);
+			query.whereEqualTo(ParseConstants.KEY_USER_ID, userId);
+			query.whereEqualTo(ParseConstants.KEY_FOLLOWING, friendObj);
 			query.countInBackground(new CountCallback() {
 
 				@Override
@@ -224,19 +223,13 @@ public class AddFriend extends ActionBarActivity {
 								.getParseFile(ParseConstants.KEY_IMAGE);
 						String friendName = user
 								.getString(ParseConstants.KEY_NAME);
+						// get object ID
+						friendObjId = user.getObjectId();
 						mTextUserName.setText(friendName);
 						mButtonAdd.setOnClickListener(addFriend);
 						mImageViewFriend.setParseFile(image);
 						// LOADER IMAGE
-						mImageViewFriend
-								.loadInBackground(new GetDataCallback() {
-
-									@Override
-									public void done(byte[] arg0,
-											ParseException arg1) {
-										// DO nothing
-									}
-								});
+						mImageViewFriend.loadInBackground();
 
 					} else {
 						// failed
@@ -258,14 +251,16 @@ public class AddFriend extends ActionBarActivity {
 			public void onClick(View v) {
 				// add progress bar
 				initProgressDialog();
+				// Setup Friend OBJ
+				ParseObject friendObj = ParseObject.createWithoutData(
+						ParseConstants.TABLE_USER, friendObjId);
 
+				// Query
 				String userId = ParseUser.getCurrentUser().getObjectId();
-				ParseObject tempUser = ParseObject.createWithoutData(
-						ParseConstants.TABLE_USER, userId);
 				ParseObject object = new ParseObject(
 						ParseConstants.TABLE_REL_USER_USER);
-				object.put(ParseConstants.KEY_USER_ID, tempUser);
-				object.put(ParseConstants.KEY_FOLLOWING_ID, friendObj);
+				object.put(ParseConstants.KEY_USER_ID, userId);
+				object.put(ParseConstants.KEY_FOLLOWING, friendObj);
 				object.saveInBackground(new SaveCallback() {
 
 					@Override
@@ -275,7 +270,7 @@ public class AddFriend extends ActionBarActivity {
 
 						if (e == null) {
 							Toast.makeText(getActivity(),
-									"Successful Following User",
+									"Successful Adding Family ",
 									Toast.LENGTH_SHORT).show();
 							Intent intent = new Intent(getActivity(),
 									MainActivity.class);

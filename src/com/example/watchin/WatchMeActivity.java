@@ -1,5 +1,7 @@
 package com.example.watchin;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,11 +34,20 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 public class WatchMeActivity extends ActionBarActivity {
+
+	protected static final String TAG = WatchMeActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +219,65 @@ public class WatchMeActivity extends ActionBarActivity {
 		// drawMaps(sourcePosition, destPosition);
 		// }
 
+		/*
+		 * Display family in the maps
+		 */
+
+		private void displayBackupLocation() {
+			String userId = ParseUser.getCurrentUser().getObjectId();
+			ParseQuery<ParseObject> query = ParseQuery
+					.getQuery(ParseConstants.TABLE_REL_USER_USER);
+			query.whereEqualTo(ParseConstants.KEY_USER_ID, userId);
+			query.include(ParseConstants.KEY_FOLLOWING);
+			query.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					if (e == null) {
+						for (ParseObject object : objects) {
+							ParseObject user = object
+									.getParseObject(ParseConstants.KEY_FOLLOWING);
+							ParseGeoPoint userPoint = user
+									.getParseGeoPoint(ParseConstants.KEY_LOCATION);
+							String userName = user
+									.getString(ParseConstants.KEY_NAME);
+							Toast.makeText(getActivity(),
+									userName + " " + userPoint.toString(),
+									Toast.LENGTH_SHORT).show();
+							if (userPoint != null) {
+								LatLng userPos = new LatLng(userPoint
+										.getLatitude(), userPoint
+										.getLongitude());
+
+								// draw marker
+								mMap.addMarker(new MarkerOptions()
+										.position(userPos)
+										.title(userName)
+										.icon(BitmapDescriptorFactory
+												.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+							}
+
+						}
+					} else {
+						errorAlertDialog(e);
+					}
+				}
+			});
+		}
+
+		/*
+		 * Error Dialog Parse
+		 */
+		private void errorAlertDialog(ParseException e) {
+			// failed
+			Log.e(TAG, e.getMessage());
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage(e.getMessage()).setTitle(R.string.error_title)
+					.setPositiveButton(android.R.string.ok, null);
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+
 		// Check GPS
 		private void showGPSDisabledAlertToUser() {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -290,6 +361,8 @@ public class WatchMeActivity extends ActionBarActivity {
 			// Draw routes to the maps
 			drawMaps(sourcePosition, destPosition);
 
+			// Display Backup Location
+			displayBackupLocation();
 			Location temp = mLocationClient.getLastLocation();
 			mapZoom(temp);
 		}
