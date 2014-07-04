@@ -21,6 +21,7 @@ public class ParseStarterProjectActivity extends Activity {
 	Button mLoginButton;
 	EditText mUserNameField;
 	EditText mPasswordField;
+	EditText mEditTextRegister;
 
 	// Variables
 	String username;
@@ -34,6 +35,18 @@ public class ParseStarterProjectActivity extends Activity {
 		mUserNameField = (EditText) findViewById(R.id.usernameField);
 		mPasswordField = (EditText) findViewById(R.id.passwordField);
 		mLoginButton = (Button) findViewById(R.id.loginButton);
+		mEditTextRegister = (EditText) findViewById(R.id.textViewRegister);
+		mEditTextRegister.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						SignUp.class);
+				startActivity(intent);
+
+			}
+		});
+
 		mLoginButton.setOnClickListener(normalLogin);
 
 		ParseAnalytics.trackAppOpened(getIntent());

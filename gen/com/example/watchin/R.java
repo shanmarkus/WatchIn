@@ -1200,15 +1200,15 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f060026;
         public static final int action_bar_title=0x7f060025;
         public static final int action_context_bar=0x7f060020;
-        public static final int action_example=0x7f06005f;
+        public static final int action_example=0x7f060060;
         public static final int action_menu_divider=0x7f060019;
         public static final int action_menu_presenter=0x7f06001a;
         public static final int action_mode_close_button=0x7f060027;
-        public static final int action_settings=0x7f06005e;
+        public static final int action_settings=0x7f06005f;
         public static final int activity_chooser_view_content=0x7f060028;
         public static final int always=0x7f06000f;
         public static final int beginning=0x7f060014;
-        public static final int buttonStatus=0x7f06004b;
+        public static final int buttonStatus=0x7f06004d;
         public static final int checkbox=0x7f060030;
         public static final int collapseActionView=0x7f060011;
         public static final int container=0x7f06003f;
@@ -1221,8 +1221,8 @@ containing a value of this type.
         public static final int end=0x7f060016;
         public static final int expand_activities_button=0x7f060029;
         public static final int expanded_menu=0x7f06002f;
-        public static final int friendProfilePicture=0x7f06004c;
-        public static final int friendUserName=0x7f06004d;
+        public static final int friendProfilePicture=0x7f06004b;
+        public static final int friendUserName=0x7f06004c;
         public static final int home=0x7f060017;
         public static final int homeAsUp=0x7f060009;
         public static final int homeCheckButton=0x7f060055;
@@ -1278,6 +1278,7 @@ containing a value of this type.
         public static final int textUserName=0x7f060046;
         public static final int textView1=0x7f060040;
         public static final int textViewMinutes=0x7f060049;
+        public static final int textViewRegister=0x7f06005e;
         public static final int textViewTimeLeft=0x7f060048;
         public static final int timeSpinner=0x7f060059;
         public static final int title=0x7f06002e;
@@ -1343,17 +1344,18 @@ containing a value of this type.
         public static final int activity_friend_detail=0x7f03001a;
         public static final int activity_friend_information=0x7f03001b;
         public static final int activity_main=0x7f03001c;
-        public static final int activity_watch_me=0x7f03001d;
-        public static final int fragment_add_friend=0x7f03001e;
-        public static final int fragment_check_in=0x7f03001f;
-        public static final int fragment_friend_detail=0x7f030020;
-        public static final int fragment_friend_information=0x7f030021;
-        public static final int fragment_home=0x7f030022;
-        public static final int fragment_main=0x7f030023;
-        public static final int fragment_navigation_drawer=0x7f030024;
-        public static final int fragment_watch_me=0x7f030025;
-        public static final int main=0x7f030026;
-        public static final int support_simple_spinner_dropdown_item=0x7f030027;
+        public static final int activity_sign_up=0x7f03001d;
+        public static final int activity_watch_me=0x7f03001e;
+        public static final int fragment_add_friend=0x7f03001f;
+        public static final int fragment_check_in=0x7f030020;
+        public static final int fragment_friend_detail=0x7f030021;
+        public static final int fragment_friend_information=0x7f030022;
+        public static final int fragment_home=0x7f030023;
+        public static final int fragment_main=0x7f030024;
+        public static final int fragment_navigation_drawer=0x7f030025;
+        public static final int fragment_watch_me=0x7f030026;
+        public static final int main=0x7f030027;
+        public static final int support_simple_spinner_dropdown_item=0x7f030028;
     }
     public static final class menu {
         public static final int check_in=0x7f0d0000;
@@ -1539,6 +1541,7 @@ containing a value of this type.
         public static final int title_activity_item_detail=0x7f070031;
         public static final int title_activity_login=0x7f07002f;
         public static final int title_activity_main=0x7f070046;
+        public static final int title_activity_sign_up=0x7f070058;
         public static final int title_activity_watch_me=0x7f070054;
         public static final int title_section1=0x7f070028;
         public static final int title_section2=0x7f070029;

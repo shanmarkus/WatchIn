@@ -89,6 +89,10 @@
             android:name=".DangerActivity"
             android:label="@string/title_activity_danger" >
         </activity>
+        <activity
+            android:name=".SignUp"
+            android:label="@string/title_activity_sign_up" >
+        </activity>
     </application>
 
 </manifest>

@@ -97,13 +97,8 @@ public class MainActivity extends ActionBarActivity implements
 		Fragment fragment = new HomeFragment();
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		switch (position) {
-		// case 0:
-		// fragment = new DiscoverFragment();
-		// break;
-		// case 1:
-		// fragment = new HomeFragment();
-		// break;
-		case 2:
+
+		case 1:
 			fragment = new FriendInformation();
 			break;
 		}
@@ -118,9 +113,6 @@ public class MainActivity extends ActionBarActivity implements
 			break;
 		case 2:
 			mTitle = getString(R.string.title_section2);
-			break;
-		case 3:
-			mTitle = getString(R.string.title_section3);
 			break;
 		}
 	}
