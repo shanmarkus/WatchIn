@@ -70,18 +70,8 @@ public class FriendDetail extends ActionBarActivity {
 
 		// UI Variables
 		TextView mFriendUsername;
-		TextView mFriendNumberCheckIn;
-		TextView mFriendNumberFollower;
 		ParseImageView mFriendProfilePicture;
-		TextView mFriendNumberFollowing;
-		ListView mRecentActivity;
 		Button mButtonStatus;
-
-		// Fixed Variables
-		ArrayList<HashMap<String, String>> friendActivities = new ArrayList<HashMap<String, String>>();
-		HashMap<String, String> friendActivity = new HashMap<String, String>();
-
-		protected static final String KEY_FRIEND_ACTIVITY = "KEY_FRIEND_ACTIVITY";
 
 		protected String friendId;
 
@@ -97,8 +87,6 @@ public class FriendDetail extends ActionBarActivity {
 				* 1000L);
 
 		// Parse Variables
-		ParseObject currentUser = ParseObject.createWithoutData(
-				ParseConstants.TABLE_USER, userId);
 		ParseObject friendObj;
 
 		public PlaceholderFragment() {
@@ -116,14 +104,11 @@ public class FriendDetail extends ActionBarActivity {
 
 			friendObj = ParseObject.createWithoutData(
 					ParseConstants.TABLE_USER, friendId);
-
 			mFriendUsername = (TextView) rootView
 					.findViewById(R.id.friendUserName);
 			mButtonStatus = (Button) rootView.findViewById(R.id.buttonStatus);
 			mFriendProfilePicture = (ParseImageView) rootView
 					.findViewById(R.id.friendProfilePicture);
-
-			getFriendAllActivity(); // 2 in 1
 
 			return rootView;
 		}
@@ -131,18 +116,8 @@ public class FriendDetail extends ActionBarActivity {
 		@Override
 		public void onResume() {
 			super.onResume();
-			clearArrayList();
 			getFriendInformation(); // 4 in 1
 			checkRelation();
-		}
-
-		/*
-		 * Clear ArrayList
-		 */
-
-		private void clearArrayList() {
-			friendActivities.clear();
-			friendActivity.clear();
 		}
 
 		/*
@@ -168,8 +143,8 @@ public class FriendDetail extends ActionBarActivity {
 
 			ParseQuery<ParseObject> query = ParseQuery
 					.getQuery(ParseConstants.TABLE_REL_USER_USER);
-			query.whereEqualTo(ParseConstants.KEY_USER_ID, currentUser);
-			query.whereEqualTo(ParseConstants.KEY_FOLLOWING_ID, tempFriendObj);
+			query.whereEqualTo(ParseConstants.KEY_USER_ID, userId);
+			query.whereEqualTo(ParseConstants.KEY_FOLLOWING, tempFriendObj);
 			query.countInBackground(new CountCallback() {
 
 				@Override
@@ -203,8 +178,8 @@ public class FriendDetail extends ActionBarActivity {
 						ParseConstants.TABLE_USER, friendId);
 				ParseObject object = new ParseObject(
 						ParseConstants.TABLE_REL_USER_USER);
-				object.put(ParseConstants.KEY_USER_ID, currentUser);
-				object.put(ParseConstants.KEY_FOLLOWING_ID, tempFriendObj);
+				object.put(ParseConstants.KEY_USER_ID, userId);
+				object.put(ParseConstants.KEY_FOLLOWING, tempFriendObj);
 				object.saveInBackground(new SaveCallback() {
 
 					@Override
@@ -234,9 +209,8 @@ public class FriendDetail extends ActionBarActivity {
 						ParseConstants.TABLE_USER, friendId);
 				ParseQuery<ParseObject> query = ParseQuery
 						.getQuery(ParseConstants.TABLE_REL_USER_USER);
-				query.whereEqualTo(ParseConstants.KEY_USER_ID, currentUser);
-				query.whereEqualTo(ParseConstants.KEY_FOLLOWING_ID,
-						tempFriendObj);
+				query.whereEqualTo(ParseConstants.KEY_USER_ID, userId);
+				query.whereEqualTo(ParseConstants.KEY_FOLLOWING, tempFriendObj);
 				query.getFirstInBackground(new GetCallback<ParseObject>() {
 
 					@Override
@@ -278,22 +252,13 @@ public class FriendDetail extends ActionBarActivity {
 						// success
 						String friendName = friend
 								.getString(ParseConstants.KEY_NAME);
-						Integer friendFollowerTotal = friend
-								.getInt(ParseConstants.KEY_FOLLOWER);
-						Integer friendFollowingTotal = friend
-								.getInt(ParseConstants.KEY_FOLLOWING);
-						Integer friendCheckInTotal = friend
-								.getInt(ParseConstants.KEY_TOTAL_CHECK_IN);
 						ParseFile image = friend
 								.getParseFile(ParseConstants.KEY_IMAGE);
-
-						mFriendProfilePicture.setParseFile(image);
+						if (image.isDataAvailable() == true) {
+							mFriendProfilePicture.setParseFile(image);
+							mFriendProfilePicture.loadInBackground();
+						}
 						mFriendUsername.setText(friendName);
-						mFriendNumberFollower.setText(friendFollowerTotal + "");
-						mFriendNumberFollowing.setText(friendFollowingTotal
-								+ "");
-						mFriendNumberCheckIn.setText(friendCheckInTotal + "");
-						mFriendProfilePicture.loadInBackground();
 						progressDialog.dismiss();
 
 					} else {
@@ -301,123 +266,6 @@ public class FriendDetail extends ActionBarActivity {
 					}
 				}
 			});
-		}
-
-		/*
-		 * Get User recent Check In Activity
-		 */
-
-		private void getFriendAllActivity() {
-			getFriendCheckInActivity(); // 2 in 1 method
-		}
-
-		private void getFriendCheckInActivity() {
-
-			ParseQuery<ParseObject> query = ParseQuery
-					.getQuery(ParseConstants.TABLE_ACTV_USER_CHECK_IN_PLACE);
-			query.whereEqualTo(ParseConstants.KEY_USER_ID, friendObj);
-			query.whereGreaterThan(ParseConstants.KEY_CREATED_AT, yesterday);
-			query.orderByAscending(ParseConstants.KEY_CREATED_AT);
-			query.setLimit(5);
-			query.include(ParseConstants.KEY_PLACE_ID);
-
-			query.findInBackground(new FindCallback<ParseObject>() {
-
-				@Override
-				public void done(List<ParseObject> friendCheckInActivities,
-						ParseException e) {
-					if (e == null) {
-						// success
-						for (ParseObject activity : friendCheckInActivities) {
-							// Setup Hash map
-							HashMap<String, String> friendActivity = new HashMap<String, String>();
-
-							Date date = activity.getCreatedAt();
-							String createAt = date.toString();
-							ParseObject tempPlace = activity
-									.getParseObject(ParseConstants.KEY_PLACE_ID);
-
-							String placeName = tempPlace
-									.getString(ParseConstants.KEY_NAME);
-
-							String message = "Check in at " + placeName
-									+ " on " + createAt;
-							friendActivity.put(KEY_FRIEND_ACTIVITY, message);
-							friendActivities.add(friendActivity);
-						}
-
-						// Do the second Finding
-						getFriendClaimActivity();
-					} else {
-						// failed
-						errorAlertDialog(e);
-					}
-				}
-			});
-
-		}
-
-		/*
-		 * get User Claim Promotion Activity
-		 */
-
-		private void getFriendClaimActivity() {
-			ParseQuery<ParseObject> query = ParseQuery
-					.getQuery(ParseConstants.TABLE_ACTV_USER_CLAIM_PROMOTION);
-			query.whereGreaterThan(ParseConstants.KEY_CREATED_AT, yesterday);
-			query.whereEqualTo(ParseConstants.KEY_USER_ID, friendObj);
-			query.orderByAscending(ParseConstants.KEY_CREATED_AT);
-			query.setLimit(5);
-			query.include(ParseConstants.KEY_PROMOTION_ID);
-			query.findInBackground(new FindCallback<ParseObject>() {
-
-				@Override
-				public void done(List<ParseObject> friendClaimAcitivities,
-						ParseException e) {
-					if (e == null) {
-						// success
-						for (ParseObject activity : friendClaimAcitivities) {
-							// Setup Hash map
-							HashMap<String, String> friendActivity = new HashMap<String, String>();
-
-							Date date = activity.getCreatedAt();
-							String createAt = date.toString();
-							ParseObject tempPromotion = activity
-									.getParseObject(ParseConstants.KEY_PROMOTION_ID);
-
-							String promotionName = tempPromotion
-									.getString(ParseConstants.KEY_NAME);
-
-							String message = "Claim " + promotionName + " on "
-									+ createAt;
-							friendActivity.put(KEY_FRIEND_ACTIVITY, message);
-							friendActivities.add(friendActivity);
-						}
-						setAdapter();
-					} else {
-						// failed
-						errorAlertDialog(e);
-					}
-
-				}
-			});
-		}
-
-		/*
-		 * Setup adapter
-		 */
-		public void setAdapter() {
-
-			Collections.shuffle(friendActivities);
-
-			String[] keys = { KEY_FRIEND_ACTIVITY, ParseConstants.KEY_REVIEW };
-			int[] ids = { android.R.id.text1, android.R.id.text2 };
-
-			SimpleAdapter adapter = new SimpleAdapter(getActivity(),
-					friendActivities, android.R.layout.simple_list_item_2,
-					keys, ids);
-
-			mRecentActivity.setAdapter(adapter);
 		}
 
 		/*

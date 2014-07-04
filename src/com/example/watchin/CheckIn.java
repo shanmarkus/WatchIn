@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,7 +106,6 @@ public class CheckIn extends ActionBarActivity {
 		private GoogleMap mMap;
 		private SupportMapFragment fragment;
 		private LocationClient mLocationClient;
-		private Location currentLocation = null;
 		private Location mLastLocation;
 		private static final LocationRequest REQUEST = LocationRequest.create()
 				.setFastestInterval(1000) // 16ms = 60fps
@@ -241,8 +242,19 @@ public class CheckIn extends ActionBarActivity {
 					// check if user already near the target location or not
 					if (location.distanceTo(tempLocation) < 100) {
 						// user already near the location
+						Toast.makeText(getActivity(), "Arrive Safely",
+								Toast.LENGTH_SHORT);
+
+						// Send user back to main menu
+						Intent intent = new Intent(getActivity(),
+								MainActivity.class);
+						startActivity(intent);
+						getActivity().finish();
+
 					} else {
 						isCheckIn = false;
+						// set Notification
+						setNotification(getActivity());
 
 						// prompt alert dialog for check in
 						AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -373,6 +385,22 @@ public class CheckIn extends ActionBarActivity {
 							}
 						}
 					});
+		}
+
+		/*
+		 * Vibration and light
+		 */
+
+		@SuppressLint("InlinedApi")
+		private static void setNotification(Context context) {
+			NotificationCompat.Builder builder = new NotificationCompat.Builder(
+					context);
+			// Vibration
+			builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+
+			// LED
+			builder.setLights(android.R.color.holo_blue_bright, 3000, 3000);
+
 		}
 
 		/*

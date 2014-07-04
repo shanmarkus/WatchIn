@@ -109,8 +109,8 @@ public class FriendInformation extends Fragment {
 		// Do the Query
 		ParseQuery<ParseObject> query = ParseQuery
 				.getQuery(ParseConstants.TABLE_REL_USER_USER);
-		query.whereEqualTo(ParseConstants.KEY_USER_ID, currentUser);
-		query.include(ParseConstants.KEY_FOLLOWING_ID);
+		query.whereEqualTo(ParseConstants.KEY_USER_ID, userId);
+		query.include(ParseConstants.KEY_FOLLOWING);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
@@ -125,7 +125,7 @@ public class FriendInformation extends Fragment {
 
 						// get the following list
 						ParseObject tempFriend = friend
-								.getParseObject(ParseConstants.KEY_FOLLOWING_ID);
+								.getParseObject(ParseConstants.KEY_FOLLOWING);
 						String friendName = tempFriend
 								.getString(ParseConstants.KEY_NAME);
 						String friendId = tempFriend.getObjectId();
@@ -133,8 +133,7 @@ public class FriendInformation extends Fragment {
 						// add to array list
 						friendInfo.put(ParseConstants.KEY_NAME, friendName);
 						friendsInfo.add(friendInfo);
-						
-						
+
 						friendIds.add(friendId);
 					}
 					// Set the adapter
