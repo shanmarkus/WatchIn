@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.parse.LogInCallback;
 import com.parse.ParseAnalytics;
@@ -21,7 +22,7 @@ public class ParseStarterProjectActivity extends Activity {
 	Button mLoginButton;
 	EditText mUserNameField;
 	EditText mPasswordField;
-	EditText mEditTextRegister;
+	TextView mEditTextRegister;
 
 	// Variables
 	String username;
@@ -35,7 +36,7 @@ public class ParseStarterProjectActivity extends Activity {
 		mUserNameField = (EditText) findViewById(R.id.usernameField);
 		mPasswordField = (EditText) findViewById(R.id.passwordField);
 		mLoginButton = (Button) findViewById(R.id.loginButton);
-		mEditTextRegister = (EditText) findViewById(R.id.textViewRegister);
+		mEditTextRegister = (TextView) findViewById(R.id.textViewRegister);
 		mEditTextRegister.setOnClickListener(new OnClickListener() {
 
 			@Override
