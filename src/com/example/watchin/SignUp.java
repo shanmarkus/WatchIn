@@ -23,6 +23,8 @@ public class SignUp extends Activity {
 	protected EditText mName;
 	protected Button mSignUpButton;
 
+	// TEsting git 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
