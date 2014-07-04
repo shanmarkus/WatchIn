@@ -48,6 +48,10 @@
     <string name="title_activity_home">Home</string>
     <string name="title_activity_watch_me">Watch Me</string>
     <string name="watch_me_spinner_title">Time Reminder</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="name_hint">Your Name</string>
+    <string name="email_hint">Email</string>
 
     <string-array name="time_arrays">
         <item>30</item>
