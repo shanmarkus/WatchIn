@@ -2,10 +2,17 @@ package com.example.watchin;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class SignUp extends Activity {
+
+	protected EditText mUsername;
+	protected EditText mPassword;
+	protected EditText mPhone;
+	protected EditText mEmail;
+	protected EditText mName;
+	protected Button mSignUpButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
