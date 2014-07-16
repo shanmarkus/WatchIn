@@ -249,7 +249,7 @@ public class WatchMeActivity extends ActionBarActivity {
 										.getLatitude(), userPoint
 										.getLongitude());
 
-								// draw marker
+								// draw markerS
 								mMap.addMarker(new MarkerOptions()
 										.position(userPos)
 										.title(userName)

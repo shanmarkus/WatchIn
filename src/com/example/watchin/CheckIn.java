@@ -14,13 +14,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -260,7 +260,7 @@ public class CheckIn extends ActionBarActivity {
 						AlertDialog.Builder builder = new AlertDialog.Builder(
 								getActivity());
 						builder.setMessage(
-								"Check In Mutha Fukka !"
+								"Check In Please "
 										+ " you will arrive at your destination in "
 										+ distanceLeft + " meters")
 								.setPositiveButton("Yes",
@@ -320,15 +320,41 @@ public class CheckIn extends ActionBarActivity {
 						for (ParseObject object : objects) {
 							ParseObject user = object
 									.getParseObject(ParseConstants.KEY_FOLLOWING);
+
 							String phoneNumber = user
 									.getString(ParseConstants.KEY_PHONE);
+							String familyName = user
+									.getString(ParseConstants.KEY_NAME);
+							String time = user.getUpdatedAt().toString();
+
 							String message = "Hey !! " + userName
 									+ " is missing from our grid, "
 									+ "his/her last position are in " + address;
 
+							String temo = "Hi "
+									+ familyName
+									+ ", this is WatchMe Application sending you alert on behalf of "
+									+ userName
+									+ "He/she has not responded to the safe confirmation message "
+									+ "we sent in the past #numberofminutes. Our app detected his/her last "
+									+ "location"
+									+ "activity and his/her last tracked location is in"
+									+ address
+									+ ". Thank you."
+									+ "P/S: This is automated alert message and will be sent again in"
+									+ duration
+									+ " minutes if no responses from the user are acquired";
+
+							Toast.makeText(getActivity(), phoneNumber + " - ",
+									Toast.LENGTH_LONG).show();
+							//
 							Toast.makeText(getActivity(),
-									phoneNumber + "-" + message,
-									Toast.LENGTH_SHORT).show();
+									phoneNumber + " - " + message,
+									Toast.LENGTH_LONG).show();
+
+							// Send Message
+							// sendSMS(phoneNumber, message);
+
 							// startActivity(new Intent(Intent.ACTION_VIEW, Uri
 							// .parse(message
 							// + Integer.parseInt(phoneNumber))));
@@ -385,6 +411,18 @@ public class CheckIn extends ActionBarActivity {
 							}
 						}
 					});
+		}
+
+		/*
+		 * Send Message
+		 */
+
+		protected void sendSMS(String phoneNo, String message) {
+			Log.i("Send SMS", "");
+			Toast.makeText(getActivity(), "send sms", Toast.LENGTH_SHORT)
+					.show();
+			SmsManager.getDefault().sendTextMessage(phoneNo, null, message,
+					null, null);
 		}
 
 		/*
